@@ -1,12 +1,7 @@
 var exphbs = require('express-handlebars');
 
-// OUR MOCK ARRAY OF PROJECTS
-// let reviews = [
-//   { title: "New Review" },
-//   { title: "Next Review" }
-// ]
-
 const express = require('express')
+const methodOverride = require('method-override')
 const app = express()
 
 const mongoose = require('mongoose');
@@ -21,9 +16,18 @@ const Review = mongoose.model('Review', {
 // INITIALIZE BODY-PARSER AND ADD IT TO APP
 const bodyParser = require('body-parser');
 
-
 // The following line must appear AFTER const app = express() and before your routes!
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// override with POST having ?_method=DELETE or ?_method=PUT
+app.use(methodOverride('_method'))
+
+
+
+// NEW
+app.get('/reviews/new', (req, res) => {
+  res.render('reviews-new', {});
+})
 
 //CREATE
 app.post('/reviews', (req, res) => {
@@ -44,6 +48,24 @@ app.get('/reviews/:id', (req, res) => {
   })
 })
 
+// EDIT
+app.get('/reviews/:id/edit', function (req, res) {
+  Review.findById(req.params.id, function(err, review) {
+    res.render('reviews-edit', {review: review});
+  })
+})
+
+// UPDATE
+app.put('/reviews/:id', (req, res) => {
+  Review.findByIdAndUpdate(req.params.id, req.body)
+    .then(review => {
+      res.redirect(`/reviews/${review._id}`)
+    })
+    .catch(err => {
+      console.log(err.message)
+    })
+})
+
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
@@ -58,10 +80,7 @@ app.get('/', (req, res) => {
     })
 })
 
-// NEW
-app.get('/reviews/new', (req, res) => {
-  res.render('reviews-new', {});
-})
+
 
 app.listen(3000, () => {
   console.log('App listening on port 3000!')
