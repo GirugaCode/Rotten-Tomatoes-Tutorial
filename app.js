@@ -1,5 +1,8 @@
 var exphbs = require('express-handlebars');
 
+var routes = require('./controllers/reviews');
+
+
 const express = require('express')
 const methodOverride = require('method-override')
 const app = express()
@@ -15,6 +18,7 @@ const Review = mongoose.model('Review', {
 
 // INITIALIZE BODY-PARSER AND ADD IT TO APP
 const bodyParser = require('body-parser');
+
 
 // The following line must appear AFTER const app = express() and before your routes!
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -90,8 +94,9 @@ app.get('/', (req, res) => {
     })
 })
 
-
-
 app.listen(3000, () => {
   console.log('App listening on port 3000!')
 })
+
+routes(app, Review);
+module.exports = app;
