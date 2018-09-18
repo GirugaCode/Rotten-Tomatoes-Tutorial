@@ -7,7 +7,7 @@ const express = require('express')
 const methodOverride = require('method-override')
 const app = express()
 
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/rotten-potatoes');
 mongoose.connect('mongodb://localhost/rotten-potatoes', { useMongoClient: true });
 
