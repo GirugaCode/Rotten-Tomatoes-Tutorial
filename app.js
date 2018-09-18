@@ -1,6 +1,6 @@
 var exphbs = require('express-handlebars');
-
 var routes = require('./controllers/reviews');
+var mongoose = require('mongoose');
 
 
 const express = require('express')
@@ -8,6 +8,7 @@ const methodOverride = require('method-override')
 const app = express()
 
 const mongoose = require('mongoose');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/rotten-potatoes');
 mongoose.connect('mongodb://localhost/rotten-potatoes', { useMongoClient: true });
 
 const Review = mongoose.model('Review', {
@@ -94,7 +95,7 @@ app.get('/', (req, res) => {
     })
 })
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log('App listening on port 3000!')
 })
 
