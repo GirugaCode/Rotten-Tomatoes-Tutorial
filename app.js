@@ -37,14 +37,6 @@ app.post('/reviews', (req, res) => {
   })
 })
 
-// SHOW
-app.get('/reviews/:id', (req, res) => {
-  ReviewModel.findById(req.params.id).then((review) => {
-    res.render('reviews-show', { review: review })
-  }).catch((err) => {
-    console.log(err.message);
-  })
-})
 
 // EDIT
 app.get('/reviews/:id/edit', function (req, res) {
