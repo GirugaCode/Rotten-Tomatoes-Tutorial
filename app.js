@@ -66,6 +66,15 @@ app.delete('/reviews/:id', function (req, res) {
   })
 })
 
+app.delete('/reviews/comments/:id', function (req, res) {
+  console.log("DELETE comment")
+  CommentModel.findByIdAndRemove(req.params.id).then((comment) => {
+    res.redirect(`/reviews/${comment.reviewId}`);
+  }).catch((err) => {
+    console.log(err.message);
+  })
+})
+
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
